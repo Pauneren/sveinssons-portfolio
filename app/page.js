@@ -103,17 +103,18 @@ export default function Home() {
     return (
       <article
         key={project._id || project.id}
-        className="bg-surface p-8 rounded-3xl shadow-2xl hover:shadow-[0_20px_50px_rgba(196,20,150,0.22)] ring-1 ring-black/20 transform-gpu hover:-translate-y-2 transition text-muted"
+        className="project-card"
       >
-        <div className="relative h-48 mb-6 rounded-xl overflow-hidden">
-          <Image
-            src={imageUrl}
-            alt={project.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover contrast-105 brightness-110 transform-gpu transition-transform duration-300 group-hover:scale-105"
-            quality={75}
-          />
+        <div className="project-image">
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={project.title}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0.75rem' }}
+            />
+          ) : (
+            <span>Project Image</span>
+          )}
         </div>
 
         <h3 className={`text-xl font-semibold mb-4 text-white ${inter.className}`}>
@@ -124,7 +125,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => onOpen(index, imageUrl)}
-            className="inline-flex items-center gap-2 text-sm text-white bg-[#DC1DB7] hover:bg-[#DC1DB7]/90 px-3 py-2 rounded-md hover:shadow-[0_10px_30px_rgba(220,29,183,0.3)] transition border border-white/20"
+            className="btn"
           >
             View Project
           </button>
@@ -391,18 +392,18 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="bg-deep py-24 px-6 scroll-mt-20" data-reveal>
+      <section id="services" className="py-24 px-6 scroll-mt-20" data-reveal>
         <h2 className={`text-4xl font-bold mb-12 text-center text-white ${inter.className}`}>What We Do</h2>
-        <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
-          <div className="bg-surface p-8 rounded-3xl shadow-2xl hover:shadow-[0_20px_50px_rgba(196,20,150,0.22)] ring-1 ring-black/20 transform-gpu hover:-translate-y-2 transition text-muted" data-reveal>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+          <div className="card" data-reveal>
             <h3 className={`text-xl font-semibold mb-4 text-white ${inter.className}`}>Web Design</h3>
             <p>Beautiful and professional website designs tailored to your brand.</p>
           </div>
-          <div className="bg-surface p-8 rounded-3xl shadow-2xl hover:shadow-[0_20px_50px_rgba(196,20,150,0.22)] ring-1 ring-black/20 transform-gpu hover:-translate-y-2 transition text-muted" data-reveal>
+          <div className="card" data-reveal>
             <h3 className={`text-xl font-semibold mb-4 text-white ${inter.className}`}>Development</h3>
             <p>Responsive, accessible, and fast websites using modern technologies.</p>
           </div>
-          <div className="bg-surface p-8 rounded-3xl shadow-2xl hover:shadow-[0_20px_50px_rgba(196,20,150,0.22)] ring-1 ring-black/20 transform-gpu hover:-translate-y-2 transition text-muted" data-reveal>
+          <div className="card" data-reveal>
             <h3 className={`text-xl font-semibold mb-4 text-white ${inter.className}`}>Optimization</h3>
             <p>SEO and performance enhancements to help your site get noticed.</p>
           </div>
@@ -410,12 +411,12 @@ export default function Home() {
       </section>
 
       {/* Portfolio Section */}
-      <section id="portfolio" className="max-w-6xl mx-auto py-24 px-6 scroll-mt-20">
+      <section id="portfolio" className="py-24 px-6 scroll-mt-20">
         <h2 className={`text-4xl font-bold mb-12 text-center text-white ${inter.className}`}>Portfolio</h2>
         <p className={`text-center mb-10 text-muted ${inter.className}`}>
           We’re currently building our first collection of projects. Here’s a preview of what’s to come:
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto">
+        <div className="portfolio-grid">
           {projects.map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i} onOpen={openModalWithImage} />
           ))}
@@ -430,7 +431,7 @@ export default function Home() {
         </p>
         <a
           href="mailto:paula1@ymail.com"
-          className="inline-flex items-center gap-3 bg-gradient-to-r from-[#DC1DB7] to-[#21CEE0] hover:from-[#DC1DB7]/90 hover:to-[#21CEE0]/90 text-white px-8 py-4 rounded-2xl font-semibold shadow-2xl hover:shadow-[0_20px_50px_rgba(220,29,183,0.3)] transform-gpu hover:-translate-y-1 hover:scale-105 transition border-2 border-white/25 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/25 active:translate-y-0.5"
+          className="btn"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M4 4h16v16H4z" opacity="0" />
