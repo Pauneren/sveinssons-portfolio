@@ -73,14 +73,26 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <head>
-        {/* Remove attributes injected by browser extensions that can cause hydration mismatches. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `;(function(){try{const attrs=Array.from(document.documentElement.attributes).map(a=>a.name).filter(n=>n.startsWith('cz-'));attrs.forEach(n=>{document.documentElement.removeAttribute(n);document.body.removeAttribute(n)});}catch(e){}})();`,
           }}
         />
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            body {
+              background-color: #0E172A !important;
+              color: white !important;
+              margin: 0 !important;
+              padding: 0 !important;
+            }
+            * {
+              box-sizing: border-box !important;
+            }
+          `
+        }} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
