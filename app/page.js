@@ -530,7 +530,7 @@ export default function Home() {
         <p className={`text-center mb-10 text-muted ${inter.className}`}>
           We’re currently building our first collection of projects. Here’s a preview of what’s to come:
         </p>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {availableProjects.map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i} onOpen={openModalWithImage} />
           ))}
