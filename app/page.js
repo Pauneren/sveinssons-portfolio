@@ -21,21 +21,43 @@ export default function Home() {
   const modalRef = useRef(null);
   const [mounted, setMounted] = useState(false);
 
-  // Portfolio projects with existing images
-  const projects = [
+  // Fallback projects for GitHub Pages deployment
+  const fallbackProjects = [
     {
-      id: 'project-1',
+      _id: 'project-1',
       title: 'Landing Page Design',
       description: 'A clean, responsive landing page focused on conversions.',
       image: '/projects/project-1.png',
     },
     {
-      id: 'project-2',
+      _id: 'project-2',
       title: 'E‑commerce Template',
       description: 'Lightweight store front with accessibility and performance in mind.',
       image: '/projects/project-2.png',
     },
   ];
+
+  const [projects, setProjects] = useState(fallbackProjects);
+
+  useEffect(() => {
+    // Try to fetch from Sanity API, fall back to static projects
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('/api/projects');
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.length > 0) {
+            setProjects(data);
+          }
+        }
+      } catch (error) {
+        // Keep fallback projects if API fails
+        console.log('Using fallback projects - API not available');
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   useEffect(() => {
     // Track when the page has mounted so we can avoid rendering
@@ -76,14 +98,16 @@ export default function Home() {
   }, []);
 
   function ProjectCard({ project, index, onOpen }) {
+    const imageUrl = project.image?.asset?.url || project.image;
+
     return (
       <article
-        key={project.id}
+        key={project._id || project.id}
         className="bg-surface p-8 rounded-3xl shadow-2xl hover:shadow-[0_20px_50px_rgba(196,20,150,0.22)] ring-1 ring-black/20 transform-gpu hover:-translate-y-2 transition text-muted"
       >
         <div className="relative h-48 mb-6 rounded-xl overflow-hidden">
           <Image
-            src={project.image}
+            src={imageUrl}
             alt={project.title}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -99,7 +123,7 @@ export default function Home() {
         <div className="flex gap-3 items-center">
           <button
             type="button"
-            onClick={() => onOpen(index, project.image)}
+            onClick={() => onOpen(index, imageUrl)}
             className="inline-flex items-center gap-2 text-sm text-white bg-[#DC1DB7] hover:bg-[#DC1DB7]/90 px-3 py-2 rounded-md hover:shadow-[0_10px_30px_rgba(220,29,183,0.3)] transition border border-white/20"
           >
             View Project
