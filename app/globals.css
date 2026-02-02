@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0E172A; /* your specified background */
+  --foreground: #94A3B8; /* muted text */
+  --color-primary: #DC1DB7; /* your specified pink */
+  --color-deep: #0E172A; /* your specified background */
+  --color-teal: #21CEE0; /* your specified cyan */
+  --color-muted: #94A3B8; /* muted text */
+  --color-accent: #DC1DB7; /* your specified pink */
+  --color-surface: #1E293B; /* slate surface */
 }
 
 @theme inline {
@@ -26,6 +32,82 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* Subtle animations and reveal helpers for small portfolio touches */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Reveal animations for section content */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 560ms cubic-bezier(.2,.9,.3,1), transform 560ms cubic-bezier(.2,.9,.3,1);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Gentle utility transitions for interactive elements */
+a, button {
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+/* Focus outline override to match brand */
+:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(124,58,237,0.12);
+  border-radius: 8px;
+}
+
+/* Logo hover animation */
+.logo-anim {
+  transition: transform 280ms cubic-bezier(.2,.9,.3,1), filter 280ms ease;
+  will-change: transform, filter;
+}
+.group:hover .logo-anim {
+  transform: translateY(-4px) rotate(-6deg) scale(1.06);
+  filter: drop-shadow(0 18px 40px rgba(196,20,150,0.12));
+}
+
+.logo-text {
+  transition: color 280ms cubic-bezier(.2,.9,.3,1), transform 280ms cubic-bezier(.2,.9,.3,1), text-shadow 280ms ease;
+}
+.group:hover .logo-text {
+  color: var(--color-accent);
+  transform: translateY(-2px) scale(1.02);
+  text-shadow: 0 10px 30px rgba(196,20,150,0.18);
+}
+
+/* Lightbox modal styles */
+.lightbox-enter {
+  opacity: 0;
+}
+.lightbox-enter-active {
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+.lightbox-content {
+  transform: translateY(8px) scale(0.98);
+  transition: transform 220ms cubic-bezier(.2,.9,.3,1), opacity 220ms ease;
+}
+.lightbox-open .lightbox-content {
+  transform: translateY(0) scale(1);
+}
+
+/* Force card backgrounds to 1E293B */
+.bg-surface {
+  background-color: #1E293B !important;
 }
 
 
