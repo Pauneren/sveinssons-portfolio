@@ -136,100 +136,21 @@ export default function Home() {
   }, []);
 
   function ProjectCard({ project, index, onOpen }) {
-    const [imgAvailable, setImgAvailable] = useState(null); // null=unknown, true/false
-    const [imageSrc, setImageSrc] = useState(project.image);
-
-    useEffect(() => {
-      let mounted = true;
-      const ctrl = new AbortController();
-
-      // Build candidate filenames to try (original + common extensions + dash/undashed variants)
-      const tryCandidates = async () => {
-        const original = project.image;
-        const base = original.replace(/\.(jpg|jpeg|png|webp)$/i, '');
-        const candidates = [original];
-        const exts = ['jpg', 'png', 'webp', 'jpeg'];
-
-        // Add extension variants
-        exts.forEach((e) => {
-          const c = `${base}.${e}`;
-          if (!candidates.includes(c)) candidates.push(c);
-        });
-
-        // Also try dashed/undashed variants if applicable
-        const lastSlash = base.lastIndexOf('/');
-        const dir = base.slice(0, lastSlash + 1);
-        const name = base.slice(lastSlash + 1);
-        if (name.includes('-')) {
-          const undashed = dir + name.replace(/-/g, '');
-          exts.forEach((e) => {
-            const c = `${undashed}.${e}`;
-            if (!candidates.includes(c)) candidates.push(c);
-          });
-        } else if (/[0-9]/.test(name)) {
-          // try inserting a dash before the number (e.g., project2 -> project-2)
-          const dashed = dir + name.replace(/(\D+)(\d+)/, '$1-$2');
-          exts.forEach((e) => {
-            const c = `${dashed}.${e}`;
-            if (!candidates.includes(c)) candidates.push(c);
-          });
-        }
-
-        for (const c of candidates) {
-          try {
-            const res = await fetch(c, { method: 'HEAD', signal: ctrl.signal });
-            if (!mounted) return;
-            if (res.ok) {
-              setImageSrc(c);
-              setImgAvailable(true);
-              return;
-            }
-          } catch (e) {
-            // ignore and continue
-          }
-        }
-
-        if (mounted) setImgAvailable(false);
-      };
-
-      tryCandidates();
-      return () => {
-        mounted = false;
-        ctrl.abort();
-      };
-    }, [project.image]);
-
     return (
       <article
         key={project.id}
         className="bg-surface p-8 rounded-3xl shadow-2xl hover:shadow-[0_20px_50px_rgba(196,20,150,0.22)] ring-1 ring-black/20 transform-gpu hover:-translate-y-2 transition text-muted"
       >
-        {imgAvailable !== false && (
-          <div className="relative h-48 mb-6 rounded-xl overflow-hidden">
-            <Image
-              src={imageSrc || project.image}
-              alt={project.title}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover contrast-105 brightness-110 transform-gpu transition-transform duration-300 group-hover:scale-105"
-              quality={75}
-              onError={() => setImgAvailable(false)}
-            />
-          </div>
-        )}
-
-        {imgAvailable === false && (
-          <div className="h-48 mb-6 rounded-xl bg-surface border-2 border-dashed border-white/20 flex items-center justify-center">
-            <div className="text-center px-6">
-              <svg className="mx-auto mb-3 w-12 h-12 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <rect x="3" y="3" width="18" height="14" rx="2" />
-                <path d="M21 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2" />
-                <path d="M7 13l3-3 2 2 3-3 4 4" />
-              </svg>
-              <div className="text-white/90 font-semibold text-sm">No image yet</div>
-            </div>
-          </div>
-        )}
+        <div className="relative h-48 mb-6 rounded-xl overflow-hidden">
+          <Image
+            src={project.imageSrc || project.image}
+            alt={project.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover contrast-105 brightness-110 transform-gpu transition-transform duration-300 group-hover:scale-105"
+            quality={75}
+          />
+        </div>
 
         <h3 className={`text-xl font-semibold mb-4 text-white ${inter.className}`}>
           {project.title}
@@ -238,7 +159,7 @@ export default function Home() {
         <div className="flex gap-3 items-center">
           <button
             type="button"
-            onClick={() => onOpen(index, imageSrc)}
+            onClick={() => onOpen(index, project.imageSrc || project.image)}
             className="inline-flex items-center gap-2 text-sm text-white bg-[#DC1DB7] hover:bg-[#DC1DB7]/90 px-3 py-2 rounded-md hover:shadow-[0_10px_30px_rgba(220,29,183,0.3)] transition border border-white/20"
           >
             View Project
