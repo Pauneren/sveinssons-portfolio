@@ -20,33 +20,20 @@ export default function Home() {
   const lastActiveRef = useRef(null);
   const modalRef = useRef(null);
   const [mounted, setMounted] = useState(false);
-  const [availableProjects, setAvailableProjects] = useState([]);
 
-  // Replace these with your real projects and images (put files in /public/projects/<slug>.<ext>)
+  // Portfolio projects with existing images
   const projects = [
     {
       id: 'project-1',
       title: 'Landing Page Design',
       description: 'A clean, responsive landing page focused on conversions.',
-      // existing file: public/projects/project-1.png
       image: '/projects/project-1.png',
-      href: '#',
     },
     {
       id: 'project-2',
       title: 'E‑commerce Template',
       description: 'Lightweight store front with accessibility and performance in mind.',
-      // existing file renamed to: public/projects/project-2.png
       image: '/projects/project-2.png',
-      href: '#',
-    },
-    {
-      id: 'project-3',
-      title: 'Portfolio Site',
-      description: 'Showcase site with smooth animations and modular components.',
-      // no image uploaded yet (add public/projects/project-3.jpg or .png)
-      image: '/projects/project-3.jpg',
-      href: '#',
     },
   ];
 
@@ -77,53 +64,6 @@ export default function Home() {
     return () => io.disconnect();
   }, []);
 
-  useEffect(() => {
-    // Check which projects have available images
-    const checkProjectImages = async () => {
-      const results = await Promise.all(
-        projects.map(async (project) => {
-          const original = project.image;
-          const base = original.replace(/\.(jpg|jpeg|png|webp)$/i, '');
-          const candidates = [original];
-          const exts = ['jpg', 'png', 'webp', 'jpeg'];
-
-          // Add extension variants
-          exts.forEach((e) => {
-            const c = `${base}.${e}`;
-            if (!candidates.includes(c)) candidates.push(c);
-          });
-
-          // Also try dashed/undashed variants
-          const lastSlash = base.lastIndexOf('/');
-          const dir = base.slice(0, lastSlash + 1);
-          const name = base.slice(lastSlash + 1);
-          if (name.includes('-')) {
-            const undashed = dir + name.replace(/-/g, '');
-            exts.forEach((e) => {
-              const c = `${undashed}.${e}`;
-              if (!candidates.includes(c)) candidates.push(c);
-            });
-          }
-
-          for (const candidate of candidates) {
-            try {
-              const res = await fetch(candidate, { method: 'HEAD' });
-              if (res.ok) {
-                return { ...project, hasImage: true, imageSrc: candidate };
-              }
-            } catch (e) {
-              // ignore and continue
-            }
-          }
-          return { ...project, hasImage: false };
-        })
-      );
-
-      setAvailableProjects(results.filter(p => p.hasImage));
-    };
-
-    checkProjectImages();
-  }, [projects]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -143,7 +83,7 @@ export default function Home() {
       >
         <div className="relative h-48 mb-6 rounded-xl overflow-hidden">
           <Image
-            src={project.imageSrc || project.image}
+            src={project.image}
             alt={project.title}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -159,7 +99,7 @@ export default function Home() {
         <div className="flex gap-3 items-center">
           <button
             type="button"
-            onClick={() => onOpen(index, project.imageSrc || project.image)}
+            onClick={() => onOpen(index, project.image)}
             className="inline-flex items-center gap-2 text-sm text-white bg-[#DC1DB7] hover:bg-[#DC1DB7]/90 px-3 py-2 rounded-md hover:shadow-[0_10px_30px_rgba(220,29,183,0.3)] transition border border-white/20"
           >
             View Project
@@ -451,8 +391,8 @@ export default function Home() {
         <p className={`text-center mb-10 text-muted ${inter.className}`}>
           We’re currently building our first collection of projects. Here’s a preview of what’s to come:
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {availableProjects.map((p, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
+          {projects.map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i} onOpen={openModalWithImage} />
           ))}
         </div>
