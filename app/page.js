@@ -193,26 +193,26 @@ export default function Home() {
   }, []);
 
   return (
-    <main ref={revealRef} className="min-h-screen bg-deep text-muted font-inter" suppressHydrationWarning>
+    <main ref={revealRef} className="min-h-screen font-inter" suppressHydrationWarning>
       {/* Sticky Navbar */}
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${mounted && scrolled
-          ? 'bg-deep/95 backdrop-blur-md shadow-lg border-transparent'
-          : 'bg-white/10 backdrop-blur-md backdrop-saturate-150 border-b border-white/6'
+        className={`nav transition-colors duration-300 ${mounted && scrolled
+          ? 'shadow-lg'
+          : ''
           }`}
       >
-        <div className="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
+        <div className="container flex justify-between items-center py-4">
           {/* Logo */}
           <a href="#hero" className="flex items-center gap-3 group" aria-label="Home">
             <Image src="/logo-variant-3.svg" alt="Sveinssons mark" width={36} height={36} className="drop-shadow-lg rounded-full logo-anim" priority />
-            <span className={`logo-text text-white text-2xl font-bold ${orbitron.className} hidden md:inline`}>
+            <span className={`text-white text-2xl font-bold ${orbitron.className} hidden md:inline`}>
               Sveinssons
             </span>
           </a>
 
           {/* Hamburger for Mobile */}
           <button
-            className="md:hidden text-white focus:outline-none ring-0 focus:ring-2 focus:ring-purple-300 rounded"
+            className="md:hidden text-white focus:outline-none rounded"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
           >
@@ -221,74 +221,49 @@ export default function Home() {
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
-              viewBox="0 0 24 24"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              <path d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
             </svg>
           </button>
 
           {/* Links */}
           <nav
-            className={`space-x-6 text-white font-inter md:flex md:items-center ${menuOpen
-              ? 'flex flex-col space-y-4 mt-4 md:mt-0 md:flex-row md:space-y-0'
+            className={`text-white md:flex md:items-center ${menuOpen
+              ? 'flex flex-col gap-4 mt-4 md:mt-0 md:flex-row md:gap-6'
               : 'hidden'
               }`}
             aria-hidden={!menuOpen}
           >
             <a
-              href="#contact"
-              onClick={() => setMenuOpen(false)}
-              aria-current={mounted && activeSection === 'contact' ? 'page' : undefined}
-              className={`text-white px-2 py-1 rounded-md transition ${mounted && activeSection === 'contact'
-                ? 'bg-white/10 backdrop-blur-sm border border-white/6'
-                : 'backdrop-0 hover:bg-white/10 hover:backdrop-blur-sm hover:border hover:border-white/6'
-                } focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30`}
-            >
-              Get in Touch
-            </a>
-            <a
               href="#about"
               onClick={() => setMenuOpen(false)}
-              aria-current={mounted && activeSection === 'about' ? 'page' : undefined}
-              className={`text-white px-2 py-1 rounded-md transition ${mounted && activeSection === 'about'
-                ? 'bg-white/10 backdrop-blur-sm border border-white/6'
-                : 'backdrop-0 hover:bg-white/10 hover:backdrop-blur-sm hover:border hover:border-white/6'
-                } focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30`}
+              className="text-white hover:text-primary px-2 py-1"
             >
-              About Us
+              About
             </a>
             <a
               href="#services"
               onClick={() => setMenuOpen(false)}
-              aria-current={mounted && activeSection === 'services' ? 'page' : undefined}
-              className={`text-white px-2 py-1 rounded-md transition ${mounted && activeSection === 'services'
-                ? 'bg-white/10 backdrop-blur-sm border border-white/6'
-                : 'backdrop-0 hover:bg-white/10 hover:backdrop-blur-sm hover:border hover:border-white/6'
-                } focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30`}
+              className="text-white hover:text-primary px-2 py-1"
             >
-              What We Do
+              Services
             </a>
             <a
               href="#portfolio"
               onClick={() => setMenuOpen(false)}
-              aria-current={mounted && activeSection === 'portfolio' ? 'page' : undefined}
-              className={`text-white px-2 py-1 rounded-md transition ${mounted && activeSection === 'portfolio'
-                ? 'bg-white/10 backdrop-blur-sm border border-white/6'
-                : 'backdrop-0 hover:bg-white/10 hover:backdrop-blur-sm hover:border hover:border-white/6'
-                } focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30`}
+              className="text-white hover:text-primary px-2 py-1"
             >
               Portfolio
             </a>
             <a
               href="#contact"
               onClick={() => setMenuOpen(false)}
-              aria-current={mounted && activeSection === 'contact' ? 'page' : undefined}
-              className={`text-white px-2 py-1 rounded-md transition ${mounted && activeSection === 'contact'
-                ? 'bg-white/10 backdrop-blur-sm border border-white/6'
-                : 'backdrop-0 hover:bg-white/10 hover:backdrop-blur-sm hover:border hover:border-white/6'
-                } focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30`}
+              className="text-white hover:text-primary px-2 py-1"
             >
-              Contact Us
+              Contact
             </a>
           </nav>
         </div>
@@ -297,13 +272,11 @@ export default function Home() {
       {/* Hero Section */}
       <section
         id="hero"
-        className="relative flex flex-col items-center justify-center h-screen text-center p-8 text-white bg-cover bg-center"
-        style={{ backgroundImage: "url('/my-hero.jpg')" }}
+        className="hero"
         data-reveal
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-deep/30 to-transparent" />
-        <div className="relative z-10">
-          <h1 className={`text-6xl font-extrabold mb-4 tracking-widest ${orbitron.className} animate-float`}>
+        <div className="hero-content">
+          <h1 className={`text-6xl font-extrabold mb-4 tracking-widest ${orbitron.className}`}>
             Sveinssons
           </h1>
           <p className={`text-2xl mb-6 max-w-2xl mx-auto ${inter.className}`}>
@@ -311,7 +284,7 @@ export default function Home() {
           </p>
           <a
             href="#contact"
-            className="inline-block bg-gradient-to-r from-[#DC1DB7] to-[#21CEE0] text-white px-10 py-5 rounded-full font-semibold shadow-[0_20px_50px_rgba(220,29,183,0.3)] transform-gpu hover:from-[#DC1DB7]/90 hover:to-[#21CEE0]/90 hover:-translate-y-1 hover:scale-105 transition ring-1 ring-white/20 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30"
+            className="btn"
           >
             Get in Touch
           </a>
